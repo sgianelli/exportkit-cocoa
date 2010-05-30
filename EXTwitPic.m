@@ -25,7 +25,7 @@
 
 @synthesize delegate,username,password;
 
-+ (void)tweetImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del {
++ (void)postTwitPicImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del {
 	EXTwitPic *tp = [[[EXTwitPic alloc] initWithUsername:un andPassword:pw] autorelease];
 	tp.delegate = del;
 	[tp tweetImage:img withMessage:message];
