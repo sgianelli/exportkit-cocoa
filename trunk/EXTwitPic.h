@@ -39,7 +39,7 @@
 
 - (id)initWithUsername:(NSString *)un andPassword:(NSString *)pw;
 
-- (void)tweetImage:(UIImage *)img withMessage:(NSString *)mes;
+- (void)postTwitPicImage:(UIImage *)img withMessage:(NSString *)mes;
 - (void)uploadTwitPicImage:(UIImage *)img withMessage:(NSString *)mes;
 
 + (void)tweetImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
