@@ -15,11 +15,11 @@
 @protocol EXTwitPicDelegate
 
 @required
-- (void)picture:(UIImage *)img wasSuccessfullyPostedAt:(NSURL *)location;
-- (void)picture:(UIImage *)img failedToPost:(NSError *)err;
+- (void)twitPicImage:(UIImage *)img wasSuccessfullyPostedAt:(NSURL *)location;
+- (void)twitPicImage:(UIImage *)img failedToPost:(NSError *)err;
 
 @optional
-- (void)picture:(UIImage *)img uploadedBytes:(NSInteger)up outOf:(NSInteger)total;
+- (void)twitPicImage:(UIImage *)img uploadedBytes:(NSInteger)up outOf:(NSInteger)total;
 
 @end
 
