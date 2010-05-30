@@ -42,7 +42,7 @@
 - (void)postTwitPicImage:(UIImage *)img withMessage:(NSString *)mes;
 - (void)uploadTwitPicImage:(UIImage *)img withMessage:(NSString *)mes;
 
-+ (void)tweetImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
++ (void)postTwitPicImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
 + (void)uploadTwitPicImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
 
 @end
