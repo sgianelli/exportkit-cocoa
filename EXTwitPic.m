@@ -52,7 +52,7 @@
 	return self;
 }
 
-- (void)tweetImage:(UIImage *)img withMessage:(NSString *)mes {
+- (void)postTwitPicImage:(UIImage *)img withMessage:(NSString *)mes {
 	[NSThread detachNewThreadSelector:@selector(_tweet:) toTarget:self withObject:[NSArray arrayWithObjects:img,mes,nil]];
 }
 - (void)_tweet:(NSArray *)arr {
