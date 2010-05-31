@@ -125,15 +125,15 @@ This method uploads the given image to TwitPic AND tweets the upload on Twitter.
 
 *`- (void)twitPicImage:(UIImage *)image wasSuccessfullyPostedAt:(NSURL *)location`*
 
-_image_ - The image uploaded to TwitPic.
-_location_ - The URL to the image on TwitPic.
+ *_image_ - The image uploaded to TwitPic.
+ *_location_ - The URL to the image on TwitPic.
 
 *Note* - In the source code, UploadManager actually returns a dictionary of responses from the upload's response that you can pull other details from but currently this seemed the only pertinent one that far up the line.
 
 *`- (void)twitPicImage:(UIImage *)image failedToPost:(NSError *)error`*
 
-_image_ - The image uploaded to TwitPic.
-_error_ - The error corresponding to why the upload failed.
+ *_image_ - The image uploaded to TwitPic.
+ *_error_ - The error corresponding to why the upload failed.
 
 ----
 
@@ -141,8 +141,8 @@ _error_ - The error corresponding to why the upload failed.
 
 *`- (void)twitPicImage:(UIImage *)image uploadedBytes:(NSInteger)bytes outOf:(NSInteger)total`*
 
-_image_ - The image uploaded to TwitPic.
-_bytes_ - Number of bytes uploaded to TwitPic.
-_total_ - Expected number of bytes to be uploaded.
+ *_image_ - The image uploaded to TwitPic.
+ *_bytes_ - Number of bytes uploaded to TwitPic.
+ *_total_ - Expected number of bytes to be uploaded.
 
 *Note* - Use this in a progress bar to display the current upload state to the user.
