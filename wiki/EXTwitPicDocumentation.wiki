@@ -7,9 +7,15 @@ EXTwitPic is a simple wrapper that allows the user to create an object containin
 <br></br>
 = Properties =
 
+`@property(nonatomic,retain) NSString *username`
+
 _username_ - Username for the user's Twitter account.
 
+`@property(nonatomic,retain) NSString *password`
+
 _password_ - Password for the user's Twitter account: _username_.
+
+`@property(nonatomic,assign) id<EXTwitPicDelegate> *delegate`
 
 _delegate_ - The receiver for the delegate methods declared in <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXTwitPicDocumentation#EXTwitPicDelegate">EXTwitPicDelegate</a>
 
