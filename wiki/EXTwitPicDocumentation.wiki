@@ -11,7 +11,7 @@ _username_ - Username for the user's Twitter account.
 
 _password_ - Password for the user's Twitter account: _username_.
 
-_delegate_ - The receiver for the delegate methods declared in EXTwitPicDelegate
+_delegate_ - The receiver for the delegate methods declared in EXTwitPicDocumentation#EXTwitPicDelegate
 
 <br></br>
 = Methods =
