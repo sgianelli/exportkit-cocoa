@@ -26,6 +26,7 @@
 - (id)initWithDelegate:(id)del {
 	if (self = [super init]) {
 		delegate = del;
+		deleteHash = nil;
 	}
 	
 	return self;
@@ -87,6 +88,37 @@
 	[pool drain];
 }
 
++ (void)deleteImgurImageWithHash:(NSString *)hash withDelegate:(id)del {
+	EXImgur *deleter = [[EXImgur alloc] initWithDelegate:del];	
+	[deleter performSelectorInBackground:@selector(deleteHash:) withObject:hash];
+}
+- (void)deleteHash:(NSString *)hash {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	deleteHash = hash;
+	
+	NSURLResponse *response = nil;
+	NSError *error = nil;
+	NSData *connectionResponse = nil;
+	
+	NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://imgur.com/api/delete/%@",hash]]];
+	[urlRequest setHTTPMethod:@"POST"];
+	
+	connectionResponse = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+	
+	if (error != nil) {
+		NSLog(@"ERROR: %@",[error localizedDescription]);
+	}
+	
+	if (connectionResponse) {
+		NSString *responseString = [[NSString alloc] initWithCString:[connectionResponse bytes] length:[connectionResponse length]];
+		NSLog(@"response: %@",responseString);
+		[UploadManager parseXMLFileWithData:connectionResponse withKeys:[NSArray arrayWithObjects:@"error_msg",@"error_code",@"message",nil] andDelegate:self];
+	}
+	
+	[pool drain];
+}
+
 - (void)uploadCompleted:(UploadManager *)manager {
 	[self release];
 	self = nil;
@@ -103,9 +135,16 @@
 		[delegate imgurImage:uploadingImage sentBytes:bytes ofTotal:total];
 }
 - (void)upload:(UploadManager *)manager receivedResponse:(NSDictionary *)response {
-	NSLog(@"received response: \n%@",response);
-	if (delegate)
-		[delegate imgurPostImage:uploadingImage withURL:[response objectForKey:@"imgur_page"]];
+	if (delegate && [response objectForKey:@"imgur_page"])
+		[delegate imgurSuccesfullyPostedImage:uploadingImage withURL:[response objectForKey:@"imgur_page"] andDeleteHash:[response objectForKey:@"delete_hash"]];
+	else if (delegate && [response objectForKey:@"message"])
+		[delegate imgurImageDeletedSuccesfullyWithHash:deleteHash];
+	else if (delegate && [response objectForKey:@"error_msg"] && deleteHash)
+		[delegate imgurImageFailedToDeleteWithHash:deleteHash];
+	
+	deleteHash = nil;
+	[self release];
+	self = nil;
 }
 - (NSData *)upload:(UploadManager *)manager receivedData:(NSData *)data {
 	return data;

@@ -14,11 +14,12 @@
 
 @protocol EXImgurDelegate
 
-- (void)imgurPostImage:(UIImage *)image withURL:(NSURL *)url;
+- (void)imgurSuccesfullyPostedImage:(UIImage *)image withURL:(NSURL *)url andDeleteHash:(NSString *)hash;
 - (void)imgurFailedToPostImage:(UIImage *)image withError:(NSError *)error;
 
 @optional
 - (void)imgurImage:(UIImage *)image sentBytes:(NSInteger)bytes ofTotal:(NSInteger)total;
+
 - (void)imgurImageDeletedSuccesfullyWithHash:(NSString *)hash;
 - (void)imgurImageFailedToDeleteWithHash:(NSString *)hash;
 
@@ -28,6 +29,7 @@
 @private
 	id<EXImgurDelegate> delegate;
 	UIImage *uploadingImage;
+	NSString *deleteHash;
 }
 
 + (void)uploadImageToImgur:(UIImage *)image withDelegate:(id)del;
