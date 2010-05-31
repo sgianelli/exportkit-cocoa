@@ -1,4 +1,4 @@
-#EXImgur - Documentation
+#summary EXImgur - Documentation
 
 = Introduction =
 
