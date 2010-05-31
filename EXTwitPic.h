@@ -33,9 +33,9 @@
 	NSArray *twitPicKeys;
 }
 
-@property(assign) id<EXTwitPicDelegate> delegate;
-@property(nonatomic,retain,readwrite) NSString *username;
-@property(nonatomic,retain,readwrite) NSString *password;
+@property(nonatomic,assign) id<EXTwitPicDelegate> delegate;
+@property(nonatomic,retain) NSString *username;
+@property(nonatomic,retain) NSString *password;
 
 - (id)initWithUsername:(NSString *)un andPassword:(NSString *)pw;
 
