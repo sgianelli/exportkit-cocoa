@@ -135,16 +135,17 @@
 		[delegate imgurImage:uploadingImage sentBytes:bytes ofTotal:total];
 }
 - (void)upload:(UploadManager *)manager receivedResponse:(NSDictionary *)response {
+	NSLog(@"resp: %@",response);
 	if (delegate && [response objectForKey:@"imgur_page"])
 		[delegate imgurSuccesfullyPostedImage:uploadingImage withURL:[response objectForKey:@"imgur_page"] andDeleteHash:[response objectForKey:@"delete_hash"]];
 	else if (delegate && [response objectForKey:@"message"])
-		[delegate imgurImageDeletedSuccesfullyWithHash:deleteHash];
+		if ([(NSObject *)delegate respondsToSelector:@selector(imgurImageDeletedSuccesfullyWithHash:)])
+			[delegate imgurImageDeletedSuccesfullyWithHash:deleteHash];
 	else if (delegate && [response objectForKey:@"error_msg"] && deleteHash)
-		[delegate imgurImageFailedToDeleteWithHash:deleteHash];
+		if ([(NSObject *)delegate respondsToSelector:@selector(imgurImageFailedToDeleteWithHash:)])
+			[delegate imgurImageFailedToDeleteWithHash:deleteHash];
 	
 	deleteHash = nil;
-	[self release];
-	self = nil;
 }
 - (NSData *)upload:(UploadManager *)manager receivedData:(NSData *)data {
 	return data;
