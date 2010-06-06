@@ -27,37 +27,34 @@
 - (void)beginConnectionWithRequest:(NSURLRequest *)req {
 	connection = [[NSURLConnection alloc] initWithRequest:req delegate:self];
 	[connection start];
-	NSLog(@"beginning connection");
 }
 
 - (void)connection:(NSURLConnection *)_connection didReceiveData:(NSData *)data {
 	//[data writeToFile:kCacheDirectory(@"response.txt") atomically:YES];
 	NSLog(@"RESPONSE: %@",[NSString stringWithCString:[data bytes] length:[data length]]);
 	
-	if (delegate)
-		[self parseXMLFileWithData:[delegate upload:self receivedData:data]];
-	else
-		[self parseXMLFileWithData:data];
+	[self parseXMLFileWithData:[delegate upload:self receivedData:data]];
 }
 - (void)connection:(NSURLConnection *)_connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+	NSLog(@"bytes: %d",totalBytesWritten);
 	[delegate upload:self receivedBytes:totalBytesWritten ofTotal:totalBytesExpectedToWrite];
 }
 - (void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
 	[delegate uploadFailed:self withError:error];
 }
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	[delegate uploadCompleted:self];
+- (void)connectionDidFinishLoading:(NSURLConnection *)_connection {
 }
 
-+ (void)parseXMLFileWithData:(NSData *)xml withKeys:(NSArray *)keys andDelegate:(id)del {
+
++ (void)parseXMLFileWithData:(NSData *)xml andKeys:(NSArray *)keys withDelegate:(id)del {
 	UploadManager *man = [[[UploadManager alloc] initWithParserKeys:keys andDelegate:del] autorelease];
-	man.delegate = del;
 	[man parseXMLFileWithData:xml];
 }
 - (void)parseXMLFileWithData:(NSData *)xml {
 	[connection release];
 	
 	parsedContent = [[NSMutableDictionary alloc] init];
+	tempSubContent = [[NSMutableDictionary alloc] init];
 	
 	NSXMLParser *xmlParser = [[[NSXMLParser alloc] initWithData:xml] autorelease];
 	
@@ -74,59 +71,33 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
 	NSLog(@"found file and started parsing");
 }
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {	
-	NSString * errorString = [NSString stringWithFormat:@"Error: %@", [parseError localizedDescription]];
-	NSLog(@"error parsing XML: %@", errorString);
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
 	[parsedContent release];
 }
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{ 
 	currentElement = [elementName copy];
+	
+	if ([attributeDict count] > 0 && [parseKeys containsObject:currentElement])
+		[parsedContent setObject:attributeDict forKey:currentElement];
 }
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName { 
+	[currentElement release];
 	currentElement = nil;
 }
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-	if ([parseKeys containsObject:currentElement])
+	if ([parseKeys containsObject:currentElement] && ![parsedContent objectForKey:currentElement])
 		[parsedContent setObject:string forKey:currentElement];
-	
-/*	if([currentElement isEqualToString:@"statusid"])
-		[parsedContent setObject:string forKey:@"statusid"];
-	else if([currentElement isEqualToString:@"userid"])
-		[parsedContent setObject:string forKey:@"userid"];
-	else if([currentElement isEqualToString:@"mediaid"])
-		[parsedContent setObject:string forKey:@"mediaid"];
-	else if ([currentElement isEqualToString:@"mediaurl"])
-		[parsedContent setObject:string forKey:@"mediaurl"];
-	else if([currentElement isEqualToString:@"status_id"])
-		[parsedContent setObject:string forKey:@"status_id"];
-	else if([currentElement isEqualToString:@"user_id"])
-		[parsedContent setObject:string forKey:@"user_id"];
-	else if([currentElement isEqualToString:@"token"])
-		[parsedContent setObject:string forKey:@"token"];
-	else if ([currentElement isEqualToString:@"playlist"])
-		[parsedContent setObject:string forKey:@"playlist"];
-	else if ([currentElement isEqualToString:@"media_id"])
-		[parsedContent setObject:string forKey:@"media_id"];
-	else if ([currentElement isEqualToString:@"media_url"])
-		[parsedContent setObject:string forKey:@"media_url"];
-	else if ([currentElement isEqualToString:@"user_tags"])
-		[parsedContent setObject:string forKey:@"user_tags"];
-	else if ([currentElement isEqualToString:@"vidResponse_parent"])
-		[parsedContent setObject:string forKey:@"vidResponse_parent"];
-	else if ([currentElement isEqualToString:@"geo_latitude"])
-		[parsedContent setObject:string forKey:@"geo_latitude"];
-	else if ([currentElement isEqualToString:@"geo_longitude"])
-		[parsedContent setObject:string forKey:@"geo_longitude"];
-	else if ([currentElement isEqualToString:@"message"])
-		[parsedContent setObject:string forKey:@"message"];
-	else if ([currentElement isEqualToString:@"last_byte"])
-		[parsedContent setObject:string forKey:@"last_byte"];*/
+	else if ([parseKeys containsObject:currentElement] && [parsedContent objectForKey:currentElement])
+		[[parsedContent objectForKey:currentElement] setObject:string forKey:currentElement];
 }
-- (void)parserDidEndDocument:(NSXMLParser *)parser {
+- (void)parserDidEndDocument:(NSXMLParser *)parser {	
 	if (currentElement)
 		[currentElement release];
 	
 	[delegate upload:self receivedResponse:parsedContent];
+	
+	if (parsedContent)
+		[parsedContent release];
 }
 
 	
