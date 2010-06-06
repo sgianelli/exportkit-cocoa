@@ -17,6 +17,7 @@
 @required
 - (void)twitPicImage:(UIImage *)img wasSuccessfullyPostedAt:(NSURL *)location;
 - (void)twitPicImage:(UIImage *)img failedToPost:(NSError *)err;
+- (void)twitPicCompletedAllUploads;
 
 @optional
 - (void)twitPicImage:(UIImage *)img uploadedBytes:(NSInteger)up outOf:(NSInteger)total;
@@ -28,7 +29,7 @@
 	NSString *username;
 	NSString *password;
 	
-	@private
+@private
 	NSMutableArray *currentConnections;
 	NSArray *twitPicKeys;
 }
@@ -44,5 +45,7 @@
 
 + (void)postTwitPicImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
 + (void)uploadTwitPicImage:(UIImage *)img withUsername:(NSString *)un password:(NSString *)pw message:(NSString *)message andDelegate:(id)del;
+
++ (UIImage *)thumbnailForMediaID:(NSString *)mediaid;
 
 @end

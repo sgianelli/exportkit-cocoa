@@ -9,11 +9,23 @@
 #import <Foundation/Foundation.h>
 
 
+typedef enum EXMediaType {
+	EXMediaTypePNG = 1,
+	EXMediaTypeJPEG,
+	EXMediaTypeBMP,
+	EXMediaTypeGIF,
+	EXMediaTypeMP4,
+	EXMediaTypeMOV,
+	EXMediaTypeFLV,
+	EXMediaTypeMPEG,
+	EXMediaType3GP,
+	EXMediaTypeAVI,
+} EXMediaType;
+
 @class UploadManager;
 
 @protocol UploadManagerDelegate
 
-- (void)uploadCompleted:(UploadManager *)manager;
 - (void)uploadFailed:(UploadManager *)manager withError:(NSError *)err;
 - (void)upload:(UploadManager *)manager receivedBytes:(NSInteger)bytes ofTotal:(NSInteger)total;
 - (void)upload:(UploadManager *)manager receivedResponse:(NSDictionary *)response;
@@ -25,8 +37,12 @@
 
 @interface UploadManager : NSObject {
 	id<UploadManagerDelegate> delegate;
+	
+@private
 	NSURLConnection *connection;
+	
 	NSMutableDictionary *parsedContent;
+	NSMutableDictionary *tempSubContent;
 	NSMutableString *currentElement;
 	
 	NSArray *parseKeys;
@@ -38,6 +54,6 @@
 - (void)beginConnectionWithRequest:(NSURLRequest *)req;
 
 - (void)parseXMLFileWithData:(NSData *)xml;
-+ (void)parseXMLFileWithData:(NSData *)xml withKeys:(NSArray *)keys andDelegate:(id)del;
++ (void)parseXMLFileWithData:(NSData *)xml andKeys:(NSArray *)keys withDelegate:(id)del;
 
 @end

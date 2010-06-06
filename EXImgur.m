@@ -35,6 +35,13 @@
 - (void)uploadImage:(UIImage *)img {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	if ([UIImagePNGRepresentation(img) length] > 10 * 1024 * 1024) {
+		if (delegate)
+			[delegate imgurFailedToPostImage:img withError:[NSError errorWithDomain:@"Image greater than 10MB" code:0 userInfo:nil]];
+		
+		return;
+	}
+	
 	uploadingImage = img;
 	
 	if (img == nil) {
@@ -80,7 +87,8 @@
 					 @"large_thumbnail",
 					 @"small_thumbnail",
 					 @"imgur_page",
-					 @"delete_page",nil];
+					 @"delete_page",
+					 @"rsp",nil];
 	
 	UploadManager *man = [[UploadManager alloc] initWithParserKeys:keys andDelegate:self];
 	[man performSelectorOnMainThread:@selector(beginConnectionWithRequest:) withObject:postRequest waitUntilDone:NO];
@@ -110,11 +118,8 @@
 		NSLog(@"ERROR: %@",[error localizedDescription]);
 	}
 	
-	if (connectionResponse) {
-		NSString *responseString = [[NSString alloc] initWithCString:[connectionResponse bytes] length:[connectionResponse length]];
-		NSLog(@"response: %@",responseString);
-		[UploadManager parseXMLFileWithData:connectionResponse withKeys:[NSArray arrayWithObjects:@"error_msg",@"error_code",@"message",nil] andDelegate:self];
-	}
+	if (connectionResponse)
+		[UploadManager parseXMLFileWithData:connectionResponse andKeys:[NSArray arrayWithObjects:@"error_msg",@"error_code",@"message",nil] withDelegate:self];
 	
 	[pool drain];
 }
@@ -153,6 +158,9 @@
 
 - (void)dealloc {
 	[super dealloc];
+	
+	[uploadingImage release];
+	[deleteHash release];
 }
 
 @end
