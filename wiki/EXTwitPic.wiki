@@ -7,6 +7,8 @@ EXTwitPic is a simple wrapper that allows the user to create an object containin
 <br></br>
 = Properties =
 
+----
+
 `@property(nonatomic,retain) NSString *username`
 
 _username_ - Username for the user's Twitter account.
