@@ -17,7 +17,7 @@ _password_ - Password for the user's Twitter account: _username_.
 
 `@property(nonatomic,assign) id<EXTwitPicDelegate> *delegate`
 
-_delegate_ - The receiver for the delegate methods declared in <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXTwitPicDocumentation#EXTwitPicDelegate">EXTwitPicDelegate</a>
+_delegate_ - The receiver for the delegate methods declared in <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXTwitPic#EXTwitPicDelegate">EXTwitPicDelegate</a>
 
 <br></br>
 = Methods =
