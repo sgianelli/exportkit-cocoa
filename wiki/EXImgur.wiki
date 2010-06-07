@@ -22,7 +22,7 @@ _nil_
 
  *_image_ - The image that the user wants to upload to imgur.
 
- *_delegate - The delegate to receive updates on the upload (can be _nil_), see <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXImgurDocumentation#EXImgurDelegate"> EXImgurDelegate</a>
+ *_delegate - The delegate to receive updates on the upload (can be _nil_), see <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXImgur#EXImgurDelegate">EXImgurDelegate</a>
 
 ----
 
@@ -36,7 +36,7 @@ _nil_
 
  *_hash_ - A delete hash received from a previous upload, sent to the delegate initially.
 
- *_delegate - The delegate to receive updates on the upload (can be _nil_), see <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXImgurDocumentation#EXImgurDelegate"> EXImgurDelegate</a>
+ *_delegate - The delegate to receive updates on the upload (can be _nil_), see <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXImgur#EXImgurDelegate"> EXImgurDelegate</a>
 
 <br></br>
 = EXImgurDelegate =
