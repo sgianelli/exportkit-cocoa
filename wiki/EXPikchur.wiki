@@ -67,7 +67,7 @@ _nil_
 
 *_Parameters_*
 
- *_data_ - <a href="">EXPikchurData</a> object containing non-nil values for all required parameters.
+ *_data_ - <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXPikchurData">EXPikchurData</a> object containing non-nil values for all required parameters.
 
 ----
 
