@@ -1,0 +1,166 @@
+#summary EXPikchur - Documentation
+
+= Introduction =
+
+EXPikchur is a simple wrapper for the standard Pikchur.com API.  This class allows a user to authenticate with Pikchur without saving the user's password.  The original Pikchur documentation can be found <a href="http://groups.google.com/group/pikchur-api">here</a>.
+
+<br></br>
+= Properties =
+
+`@property(nonatomic,assign) id<EXPikchurDelegate> delegate`
+
+_delegate_ - The receiver for the delegate methods declared in <a href="http://code.google.com/p/exportkit-cocoa/wiki/EXPikchur#EXPikchurDelegate">EXPikchurDelegate</a>.
+
+`@property(nonatomic,retain) NSString *userName`
+
+_userName_ - The username that corresponds to the user's account with a service.
+
+`@property(nonatomic,readonly) NSString *service`
+
+_service_ - Service to authenticate the user with. Can be any of the following: Twitter, Posterous, FourSquare, Jaiku, Tumblr, FriendFeed, identi.ca, Plurk, Koornk, BrightKite, and Pikchur.
+
+= Methods =
+
+----
+
+*`- (id)initWithUsername:(NSString *)user andPassword:(NSString *)pass forService:(EXPikchurServices)serv`*
+
+*_Return Value_*
+
+_nil_
+
+*_Parameters_*
+
+ *_user_ - The username that corresponds to the user's account with a service.
+
+ *_pass_ - Password in which to authenticate the username with.
+
+ *_serv_ - Service in which the user wishes to authenticate with.
+
+*_Notes_*
+
+This is the recommended initializer for EKPikchur, it will automatically authenticate with Pikchur.
+
+----
+
+*`- (void)authenticateWithPassword:(NSString *)pass`*
+
+*_Return Value_*
+
+_nil_
+
+*_Parameters_*
+
+ *_pass_ - Password in which to authenticate the username with.
+
+*_Notes_*
+
+This method automatically attempts to authenticate with Pikchur.
+
+----
+
+*`- (void)uploadPikchurData:(EXPikchurData *)data`*
+
+*_Return Value_*
+
+_nil_
+
+*_Parameters_*
+
+ *_data_ - <a href="">EXPikchurData</a> object containing non-nil values for all required parameters.
+
+----
+
+*`+ (UIImage *)thumbnailForMediaID:(NSString *)mediaid isVideo:(BOOL)vid`*
+
+*_Return Value_*
+
+This returns a thumbnail image of the desired media, _nil_ if invalid mediaid or other failure.
+
+*_Parameters_*
+
+ *_mediaid_ - The media ID that is returned from an upload or parsed from a media URL.
+
+ *_vid_ - Boolean value that tells whether or not the media ID is for a video, NO if it is for an image.
+
+*_Notes_*
+
+This method uses a synchronous request so it is recommended that you run this on a background thread.
+
+<br></br>
+= EXPikchurDelegate =
+
+----
+
+*_Required_*
+
+*`- (void)pikchurDidAuthenticate:(EXPikchur *)source`*
+
+ *_source_ - Object that is calling the delegate method.
+
+*`- (void)pikchurFailedToAuthenticate:(EXPikchur *)source withErrorMessage:(NSError *)error`*
+
+ *_source_ - Object that is calling the delegate method.
+
+ *_error_ - Error associated with why Pikchur did not authenticate.
+
+*`- (void)pikchur:(EXPikchur *)source didUploadData:(EXPikchurData *)data to:(NSURL *)url`*
+
+ *_source_ - Object that is calling the delegate method.
+
+ *_data_ - EXPikchurData object used to upload the file.
+
+ *_url_ - The URL associated with the now uploaded image.
+
+*_Notes_* - This can be modified from inside the source code to return various responses or the entire NSDictionary of responses from the connection.
+
+*`- (void)pikchur:(EXPikchur *)source failedToUploadData:(EXPikchurData *)data withError:(NSError *)error`*
+
+ *_source_ - Object that is calling the delegate method.
+
+ *_data_ - EXPikchurData object used to upload the file.
+
+ *_error_ - Error associated with why Pikchur did not successfully upload the data.
+
+*`- (void)pikchurCompletedAllUploads:(EXPikchur *)source`*
+
+ *_source_ - Object that is calling the delegate method.
+
+----
+
+*_Optional_*
+
+*`- (void)pikchur:(EXPikchur *)source forData:(EXPikchurData *)data receivedBytes:(NSInteger)bytes ofTotal:(NSInteger)total`*
+
+ *_source_ - Object that is calling the delegate method.
+
+ *_data_ - EXPikchurData object used to upload the file.
+
+ *_bytes_ - Bytes uploaded out of the total predicted size.
+
+ *_total_ - Total number of bytes predicted for the upload.
+
+<br/>
+= Constants Etc =
+
+----
+
+typedef enum {
+	EXPikchurServicesTwitter = 1,
+	EXPikchurServicesPosterous,
+	EXPikchurServicesFourSquare,
+	EXPikchurServicesJaiku,
+	EXPikchurServicesTumblr,
+	EXPikchurServicesFriendFeed,
+	EXPikchurServicesIdentica,
+	EXPikchurServicesPlurk,
+	EXPikchurServicesKoornk,
+	EXPikchurServicesBrightKite,
+	EXPikchurServicesPikchur,
+} *EXPikchurServices*;
+
+This is the list of supported services and is used in the custom initializer for this class.
+
+_#define kPikchurAPIKey_
+
+This is where you will define your API key received from their server <a href="http://pikchur.com/api">here</a>.
